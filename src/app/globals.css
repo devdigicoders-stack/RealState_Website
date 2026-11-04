@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #0F766E;
+  --color-primary-hover: #102A2E;
+  --color-gold: #D6A84B;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #F8FAFC;
+  color: #1E293B;
+  overflow-x: clip;
+}
+
+/* Custom 360 Rotation for interactive icons/cards */
+.rotate-360-hover {
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.group:hover .rotate-360-hover,
+.rotate-360-hover:hover {
+  transform: rotate(360deg);
+}
+
+/* Card hover transitions (Premium Clean Elevation) */
+.feature-card {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s ease !important;
+  background-color: #FFFFFF;
+}
+.feature-card:hover {
+  transform: translateY(-6px) !important;
+  border-color: #0F766E !important;
+  box-shadow: 0 20px 25px -5px rgba(15, 118, 110, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+.feature-card:hover .card-title {
+  color: #0F766E !important;
+}
+.feature-card:hover .card-icon-wrapper {
+  background-color: #ECFDF5 !important;
+  border-color: #A7F3D0 !important;
+}
+
+/* Custom button styles */
+.btn-primary {
+  background-color: #0F766E;
+  color: #FFFFFF;
+  transition: background-color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-primary:hover {
+  background-color: #102A2E;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 42, 46, 0.25);
+}
+
+/* Floating WhatsApp Highlight Animation */
+@keyframes whatsapp-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7), 0 10px 25px -5px rgba(16, 42, 46, 0.35);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgba(37, 211, 102, 0), 0 10px 25px -5px rgba(16, 42, 46, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), 0 10px 25px -5px rgba(16, 42, 46, 0.35);
+  }
+}
+
+.whatsapp-highlight {
+  animation: whatsapp-glow 2.4s infinite cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1.5px solid #0F766E;
+  color: #0F766E;
+  transition: all 0.25s ease;
+}
+.btn-secondary:hover {
+  background-color: #0F766E;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+/* =========================================================================
+   SCROLL REVEAL ANIMATIONS (Smooth, Luxury Left/Right/Up Transitions)
+   ========================================================================= */
+.reveal-left:not(.is-revealed) {
+  opacity: 0;
+  transform: translate3d(-80px, 0, 0);
+}
+
+.reveal-right:not(.is-revealed) {
+  opacity: 0;
+  transform: translate3d(80px, 0, 0);
+}
+
+.reveal-up:not(.is-revealed) {
+  opacity: 0;
+  transform: translate3d(0, 50px, 0);
+}
+
+.reveal-fade:not(.is-revealed) {
+  opacity: 0;
+}
+
+.reveal-left,
+.reveal-right,
+.reveal-up,
+.reveal-fade {
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: opacity, transform;
+}
+
+/* When in Viewport */
+.reveal-left.is-revealed,
+.reveal-right.is-revealed,
+.reveal-up.is-revealed,
+.reveal-fade.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Stagger Delay Helpers */
+.delay-100 { transition-delay: 100ms !important; }
+.delay-150 { transition-delay: 150ms !important; }
+.delay-200 { transition-delay: 200ms !important; }
+.delay-250 { transition-delay: 250ms !important; }
+.delay-300 { transition-delay: 300ms !important; }
+.delay-350 { transition-delay: 350ms !important; }
+.delay-400 { transition-delay: 400ms !important; }
+.delay-500 { transition-delay: 500ms !important; }
+.delay-600 { transition-delay: 600ms !important; }
+.delay-700 { transition-delay: 700ms !important; }
+
+/* Safe Fallbacks for Crawlers / Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-left, .reveal-right, .reveal-up, .reveal-fade {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+@media (scripting: none) {
+  .reveal-left, .reveal-right, .reveal-up, .reveal-fade {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
