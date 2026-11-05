@@ -3,7 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollRevealObserver from "@/components/ScrollRevealObserver";
-import ScrollToTop from "@/components/ScrollToTop";
+import FloatingEnquiryButton from "@/components/FloatingEnquiryButton";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import EnquiryModal from "@/components/EnquiryModal";
 
@@ -54,7 +54,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
-        <ScrollToTop />
+        <FloatingEnquiryButton />
         <WhatsAppButton />
         <EnquiryModal />
       </body>

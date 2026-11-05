@@ -28,10 +28,45 @@ export default function ContactPage() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setErrorMsg("");
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      const res = await fetch(`${apiUrl}/public/enquiry`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          companyName: formData.companyName,
+          mobileNumber: formData.mobileNumber,
+          emailAddress: formData.emailAddress,
+          businessType: formData.businessType,
+          interestedIn: formData.interestedIn,
+          message: formData.message,
+          source: "Website Contact Page",
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMsg(data.message || "Failed to submit enquiry. Please try again.");
+      }
+    } catch (err: any) {
+      console.error("Enquiry submission error:", err);
+      setErrorMsg("Network error. Please make sure the server is reachable.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -275,12 +310,20 @@ export default function ContactPage() {
                     />
                   </div>
 
+                  {/* Error Message */}
+                  {errorMsg && (
+                    <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+                      {errorMsg}
+                    </div>
+                  )}
+
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="btn-primary w-full py-4 rounded-none font-bold text-base shadow-md flex items-center justify-center gap-2 group cursor-pointer"
+                    disabled={loading}
+                    className="btn-primary w-full py-4 rounded-none font-bold text-base shadow-md flex items-center justify-center gap-2 group cursor-pointer disabled:opacity-60"
                   >
-                    <span>Submit Enquiry</span>
+                    <span>{loading ? "Submitting Enquiry..." : "Submit Enquiry"}</span>
                     <Send className="w-4 h-4 text-[#D6A84B]" />
                   </button>
 

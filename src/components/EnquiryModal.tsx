@@ -16,6 +16,8 @@ import {
 export default function EnquiryModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const [formData, setFormData] = useState({
     fullName: "",
     mobileNumber: "",
@@ -65,9 +67,40 @@ export default function EnquiryModal() {
     setIsOpen(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setErrorMsg("");
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      const res = await fetch(`${apiUrl}/public/enquiry`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          mobileNumber: formData.mobileNumber,
+          businessType: formData.businessType,
+          interestedIn: formData.requirements,
+          message: `Consultation & Demo requested for: ${formData.requirements}`,
+          source: "Website Popup Modal",
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMsg(data.message || "Failed to submit demo request.");
+      }
+    } catch (err: any) {
+      console.error("Popup enquiry error:", err);
+      setErrorMsg("Network error. Please make sure the server is reachable.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -207,13 +240,21 @@ export default function EnquiryModal() {
                 </select>
               </div>
 
+              {/* Error Alert */}
+              {errorMsg && (
+                <div className="p-2.5 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+                  {errorMsg}
+                </div>
+              )}
+
               {/* CTA Submit Button */}
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full btn-primary py-3 px-4 rounded-none font-bold text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+                  disabled={loading}
+                  className="w-full btn-primary py-3 px-4 rounded-none font-bold text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all disabled:opacity-60 cursor-pointer"
                 >
-                  <span>Submit Enquiry & Get Free Demo</span>
+                  <span>{loading ? "Submitting Demo Request..." : "Submit Enquiry & Get Free Demo"}</span>
                   <Send className="w-4 h-4 text-[#D6A84B]" />
                 </button>
               </div>
